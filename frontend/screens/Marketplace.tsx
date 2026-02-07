@@ -47,8 +47,8 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onNavigate }) => {
 
     setAccepting(offerId);
     try {
-      await acceptOffer(offerId);
-      onNavigate(Screen.CHAT);
+      const deal = await acceptOffer(offerId);
+      onNavigate(Screen.CHAT, { dealId: deal.id });
     } catch (err: any) {
       setError(err.message || 'Failed to accept offer');
     } finally {
@@ -64,8 +64,8 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onNavigate }) => {
 
     setAccepting(requestId);
     try {
-      await acceptRequest(requestId);
-      onNavigate(Screen.CHAT);
+      const deal = await acceptRequest(requestId);
+      onNavigate(Screen.CHAT, { dealId: deal.id });
     } catch (err: any) {
       setError(err.message || 'Failed to accept request');
     } finally {

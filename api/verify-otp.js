@@ -17,7 +17,7 @@ export default async function handler(request) {
       return errorResponse('Email and OTP are required');
     }
 
-    const verification = verifyStoredOtp(email, otp);
+    const verification = await verifyStoredOtp(email, otp);
     if (!verification.valid) {
       return errorResponse(verification.error);
     }

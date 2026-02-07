@@ -9,25 +9,32 @@ import { MySwaps } from './screens/MySwaps';
 import { Login, SignUp, VerifyEmail } from './screens/Auth';
 import { BottomNav } from './components/Navigation';
 
-export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.LOGIN);
-  const [history, setHistory] = useState<Screen[]>([]);
+type Route = {
+  screen: Screen;
+  params?: any;
+};
 
-  const navigate = (screen: Screen) => {
-    setHistory((prev) => [...prev, currentScreen]);
-    setCurrentScreen(screen);
+export default function App() {
+  const [currentRoute, setCurrentRoute] = useState<Route>({ screen: Screen.LOGIN });
+  const [history, setHistory] = useState<Route[]>([]);
+
+  const navigate = (screen: Screen, params?: any) => {
+    setHistory((prev) => [...prev, currentRoute]);
+    setCurrentRoute({ screen, params });
   };
 
   const goBack = () => {
     if (history.length > 0) {
       const prev = history[history.length - 1];
       setHistory((old) => old.slice(0, -1));
-      setCurrentScreen(prev);
+      setCurrentRoute(prev);
     } else {
       // Default fallback
-      setCurrentScreen(Screen.MARKETPLACE);
+      setCurrentRoute({ screen: Screen.MARKETPLACE });
     }
   };
+
+  const currentScreen = currentRoute.screen;
 
   const renderScreen = () => {
     switch (currentScreen) {
@@ -42,11 +49,11 @@ export default function App() {
       case Screen.WALLET:
         return <Wallet onNavigate={navigate} />;
       case Screen.CHAT:
-        return <Chat onBack={goBack} />;
+        return <Chat onBack={goBack} dealId={currentRoute.params?.dealId} />;
       case Screen.CREATE_OFFER:
         return <CreateOffer onBack={goBack} onPost={() => navigate(Screen.MARKETPLACE)} />;
       case Screen.PROFILE:
-        return <Profile onBack={goBack} onLogout={() => setCurrentScreen(Screen.LOGIN)} />;
+        return <Profile onBack={goBack} onLogout={() => setCurrentRoute({ screen: Screen.LOGIN })} />;
       case Screen.MY_SWAPS:
         return <MySwaps onNavigate={navigate} />;
       default:
@@ -62,7 +69,7 @@ export default function App() {
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl relative flex flex-col">
         {renderScreen()}
         {shouldShowNav && (
-          <BottomNav currentScreen={currentScreen} onNavigate={setCurrentScreen} />
+          <BottomNav currentScreen={currentScreen} onNavigate={(screen) => navigate(screen)} />
         )}
       </div>
     </div>

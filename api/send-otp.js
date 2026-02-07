@@ -37,7 +37,7 @@ export default async function handler(request) {
     }
 
     const otp = generateOtp();
-    storeOtp(email, otp);
+    await storeOtp(email, otp);
 
     await sendEmail({
       to: email,
@@ -45,9 +45,9 @@ export default async function handler(request) {
       html: generateOtpEmailHtml(otp),
     });
 
-    return jsonResponse({ 
-      success: true, 
-      message: 'Verification code sent to your email' 
+    return jsonResponse({
+      success: true,
+      message: 'Verification code sent to your email'
     });
   } catch (error) {
     console.error('Send OTP error:', error);

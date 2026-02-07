@@ -105,7 +105,7 @@ export const MySwaps: React.FC<MySwapsProps> = ({ onNavigate }) => {
                     </div>
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => onNavigate(Screen.CHAT)}
+                        onClick={() => onNavigate(Screen.CHAT, { dealId: deal.id })}
                         className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-primary h-10 px-4 text-white text-sm font-semibold shadow-md active:scale-95 transition-transform"
                       >
                         <span className="material-symbols-outlined text-[18px]">chat</span>

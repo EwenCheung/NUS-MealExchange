@@ -1,57 +1,69 @@
+import { supabaseAdmin } from './supabase.js';
+
 // Generate a random 4-digit OTP
 export function generateOtp() {
   return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
-// In-memory OTP store (for development)
-// In production, use Redis or database
-const otpStore = new Map();
+export async function storeOtp(email, otp) {
+  if (!supabaseAdmin) {
+    console.error('SUPABASE_SERVICE_ROLE_KEY missing, falling back to memory (will fail in production)');
+    return; // Fallback or throw? Better to log specific error.
+  }
 
-export function storeOtp(email, otp) {
   const normalizedEmail = email.toLowerCase().trim();
-  otpStore.set(normalizedEmail, {
-    otp,
-    createdAt: Date.now(),
-    attempts: 0,
-  });
-  
-  // Auto-expire after 10 minutes
-  setTimeout(() => {
-    otpStore.delete(normalizedEmail);
-  }, 10 * 60 * 1000);
+
+  // Delete existing OTPs for this email
+  await supabaseAdmin
+    .from('verification_codes')
+    .delete()
+    .eq('email', normalizedEmail);
+
+  // Insert new OTP
+  const { error } = await supabaseAdmin
+    .from('verification_codes')
+    .insert({
+      email: normalizedEmail,
+      otp,
+      // expires_at defaults to +10 mins in SQL
+    });
+
+  if (error) {
+    console.error('Failed to store OTP:', error);
+    throw new Error('Database error storing OTP');
+  }
 }
 
-export function verifyStoredOtp(email, inputOtp) {
+export async function verifyStoredOtp(email, inputOtp) {
+  if (!supabaseAdmin) {
+    return { valid: false, error: 'Server misconfiguration: Missing Service Key' };
+  }
+
   const normalizedEmail = email.toLowerCase().trim();
-  const stored = otpStore.get(normalizedEmail);
-  
-  if (!stored) {
+
+  const { data, error } = await supabaseAdmin
+    .from('verification_codes')
+    .select('*')
+    .eq('email', normalizedEmail)
+    .single();
+
+  if (error || !data) {
     return { valid: false, error: 'OTP expired or not found. Please request a new code.' };
   }
-  
-  // Check expiration (10 minutes)
-  const age = Date.now() - stored.createdAt;
-  if (age > 10 * 60 * 1000) {
-    otpStore.delete(normalizedEmail);
+
+  // Check expiration
+  if (new Date(data.expires_at) < new Date()) {
+    await supabaseAdmin.from('verification_codes').delete().eq('email', normalizedEmail);
     return { valid: false, error: 'OTP has expired. Please request a new code.' };
   }
-  
-  // Check max attempts
-  if (stored.attempts >= 5) {
-    otpStore.delete(normalizedEmail);
-    return { valid: false, error: 'Too many attempts. Please request a new code.' };
-  }
-  
-  // Increment attempts
-  stored.attempts++;
-  
+
   // Verify OTP
-  if (stored.otp !== inputOtp) {
+  if (data.otp !== inputOtp) {
     return { valid: false, error: 'Invalid code. Please try again.' };
   }
-  
+
   // Success - remove OTP
-  otpStore.delete(normalizedEmail);
+  await supabaseAdmin.from('verification_codes').delete().eq('email', normalizedEmail);
   return { valid: true };
 }
 
