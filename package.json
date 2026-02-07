@@ -2,9 +2,12 @@
   "name": "mealexchange",
   "version": "1.0.0",
   "type": "module",
+<<<<<<< HEAD
   "engines": {
-    "node": "20.x"
+    "node": "18.x"
   },
+=======
+>>>>>>> parent of ca301fc (Set Node.js version to 20.x for Vercel)
   "scripts": {
     "dev": "cd frontend && npm run dev",
     "dev:api": "node server.js",
