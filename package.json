@@ -1,21 +1,32 @@
 {
   "name": "mealexchange",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "cd frontend && npm run dev",
+    "dev:api": "node server.js",
+    "dev:all": "npm-run-all --parallel dev dev:api",
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview",
+    "install:all": "npm install && cd frontend && npm install"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EwenCheung/MealExchange.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EwenCheung/MealExchange/issues"
+  },
+  "homepage": "https://github.com/EwenCheung/MealExchange#readme",
+  "description": "NUS Meal Credit Exchange Platform",
   "dependencies": {
-    "react-dom": "^19.2.4",
-    "react": "^19.2.4"
-  },
-  "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "@supabase/supabase-js": "^2.95.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "resend": "^6.9.1"
   }
 }
