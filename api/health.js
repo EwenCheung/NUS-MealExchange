@@ -2,10 +2,6 @@ import { supabase } from './_lib/supabase.js';
 import { resend } from './_lib/resend.js';
 import { jsonResponse, corsHeaders } from './_lib/utils.js';
 
-export const config = {
-  runtime: 'edge',
-};
-
 export default async function handler(request) {
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 200, headers: corsHeaders() });
