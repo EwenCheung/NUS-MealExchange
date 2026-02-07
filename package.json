@@ -2,6 +2,9 @@
   "name": "mealexchange",
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "cd frontend && npm run dev",
     "dev:api": "node server.js",
