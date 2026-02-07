@@ -4,6 +4,12 @@
 
 ### *Peer-to-Peer Meal Credit Exchange Platform for NUS Students*
 
+> **Elevator Pitch:**
+>
+> Ever wanted to eat at another hall or RC? Bored of your own dining hall food? Looking to socialize — but without a forced reason?
+>
+> NUS MealExchange lets NUS students exchange meal credits across halls, RCs, and NUSC through a secure, token-based marketplace. It’s safe, campus-exclusive, and turns unused meal credits into meals, conversations, and new connections.
+
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
