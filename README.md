@@ -18,6 +18,7 @@
 
 **🔗 [Live Demo](#) | 📖 [Documentation](#features) | 🐛 [Report Bug](https://github.com/EwenCheung/MealExchange/issues) | ✨ [Request Feature](https://github.com/EwenCheung/MealExchange/issues)**
 
+
 </div>
 
 ---
